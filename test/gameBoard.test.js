@@ -36,10 +36,43 @@ describe('ship placement', () => {
     })
 
     test('should not place ship adjacent to another', () => {
-        expect(myGameBoard.getBoard()[9][0]).toBe(0)
+        expect(myGameBoard.getBoard()[9][0]).toBe(0);
     })
 
     test('should not overlap another ship', () => {
-        expect(myGameBoard.getBoard()[5][3]).toBe(0)
+        expect(myGameBoard.getBoard()[5][3]).toBe(0);
+    })
+})
+
+describe('ship attack', () => {
+    const myGameBoard = gameBoard();
+
+    beforeAll(() => {
+        myGameBoard.placeShip('a1', 1, true);
+        myGameBoard.placeShip('c2', 1, false);
+        myGameBoard.placeShip('b4', 1, false);
+        myGameBoard.receiveAttack('a1');
+        myGameBoard.receiveAttack('a2');
+        myGameBoard.receiveAttack('a4');
+        myGameBoard.receiveAttack('a4');
+        myGameBoard.receiveAttack('a4');
+        myGameBoard.receiveAttack('c2');
+        myGameBoard.receiveAttack('b4');
+    })
+
+    test('receive attack on ship', () => {
+        expect(myGameBoard.getBoard()[0][0]).toBeNull();
+    })
+
+    test('tracks missed shots', () => {
+        expect(myGameBoard.getMissedShots()).toHaveLength(2);
+    })
+
+    test('should not hit same spot more than once', () => {
+        expect(myGameBoard.getMissedShots()).toHaveLength(2)
+    })
+
+    test('reports all ships have sunk', () => {
+        expect(myGameBoard.isAllSunk()).toBe(true)
     })
 })

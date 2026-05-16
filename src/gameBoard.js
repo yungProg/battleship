@@ -1,7 +1,7 @@
 import ship from "./ship.js"
 
 export default function gameBoard () {
-    let board = [
+    const board = [
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0],
@@ -14,11 +14,19 @@ export default function gameBoard () {
         [0,0,0,0,0,0,0,0,0,0],
     ];
 
+    const missedShots = [];
+
+    const fleet = []
+
     const getBoard = () => board;
+
+    const getMissedShots = () => missedShots;
+
+    const getFleet = () => fleet;
 
     const placeShip = (coordinate, length, isVertical) => {
         const [row, column] = [getRowIndex(coordinate), getColumnIndex(coordinate)]
-        const boardDup = board;
+        const warShip = ship(length);
         if (isInvalidPosition(row, column, length, isVertical)) {
             return
         }
@@ -27,17 +35,41 @@ export default function gameBoard () {
                 return
             }
             for (let i = row; i < (row + length); i++) {
-                board[i][column] = ship(length)
+                board[i][column] = warShip;
             }
         } else {
             if (isOverFlow(column, length)) {
                 return
             }
             for (let i = column; i < (column + length); i++) {
-                board[row][i] = ship(length)
+                board[row][i] = warShip;
             }
         }
+        fleet.push(warShip)
     }
+
+    const receiveAttack = (coordinates) => {
+        const [row, column] = [getRowIndex(coordinates), getColumnIndex(coordinates)]
+        if (board[row][column]) {
+            board[row][column].hit()
+        } else if (board[row][column] === 0) {
+            missedShots.push([row, column])
+        } else {
+            return
+        }
+        board[row][column] = null;
+    }
+
+    const isAllSunk = () => {
+        for (const ship of fleet) {
+            if (!ship.isSunk()) {
+                return false
+            }
+        }
+        return true
+    }
+
+    // private methods
 
     const isInvalidPosition = (x, y, length, isVertical) => {
         if (isVertical) {
@@ -76,5 +108,5 @@ export default function gameBoard () {
 
     const getColumnIndex = (coordinate) => Number(coordinate[1]) - 1;
 
-    return { getBoard, placeShip };
+    return { getBoard, getMissedShots, isAllSunk, placeShip, receiveAttack };
 }
