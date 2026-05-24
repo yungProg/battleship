@@ -1,112 +1,150 @@
-import ship from "./ship.js"
+import ship from "./ship.js";
 
-export default function gameBoard () {
-    const board = [
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
+export default function gameBoard() {
+  const board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ];
+
+  const missedShots = [];
+
+  const fleet = [];
+
+  const getBoard = () => board;
+
+  const getMissedShots = () => missedShots;
+
+  const getFleet = () => fleet;
+
+  const placeShip = (coordinate, length, isVertical) => {
+    const [row, column] = [getRowIndex(coordinate), getColumnIndex(coordinate)];
+    const warShip = ship(length);
+    if (isInvalidPosition(row, column, length, isVertical)) {
+      return;
+    }
+    if (isVertical) {
+      if (isOverFlow(row, length)) {
+        return;
+      }
+      for (let i = row; i < row + length; i++) {
+        board[i][column] = warShip;
+      }
+    } else {
+      if (isOverFlow(column, length)) {
+        return;
+      }
+      for (let i = column; i < column + length; i++) {
+        board[row][i] = warShip;
+      }
+    }
+    fleet.push(warShip);
+  };
+
+  const receiveAttack = (coordinates) => {
+    const [row, column] = [
+      getRowIndex(coordinates),
+      getColumnIndex(coordinates),
     ];
+    if (board[row][column]) {
+      board[row][column].hit();
+    } else if (board[row][column] === 0) {
+      missedShots.push([row, column]);
+    } else {
+      return;
+    }
+    board[row][column] = null;
+  };
 
-    const missedShots = [];
+  const isAllSunk = () => {
+    for (const ship of fleet) {
+      if (!ship.isSunk()) {
+        return false;
+      }
+    }
+    return true;
+  };
 
-    const fleet = []
+  // private methods
 
-    const getBoard = () => board;
-
-    const getMissedShots = () => missedShots;
-
-    const getFleet = () => fleet;
-
-    const placeShip = (coordinate, length, isVertical) => {
-        const [row, column] = [getRowIndex(coordinate), getColumnIndex(coordinate)]
-        const warShip = ship(length);
-        if (isInvalidPosition(row, column, length, isVertical)) {
-            return
+  const isInvalidPosition = (x, y, length, isVertical) => {
+    if (isVertical) {
+      for (let i = x; i < x + length; i++) {
+        let positions = [
+          [i - 1, y],
+          [i, y],
+          [i + 1, y],
+          [i - 1, y - 1],
+          [i + 1, y + 1],
+          [i, y - 1],
+          [i, y + 1],
+          [i - 1, y + 1],
+          [i + 1, y - 1],
+        ];
+        positions = positions.filter((pair) =>
+          pair.every((coordinate) => coordinate >= 0 && coordinate < 10),
+        );
+        for (const coordinates of positions) {
+          if (board[coordinates[0]][coordinates[1]] != 0) {
+            return true;
+          }
         }
-        if (isVertical) {
-            if (isOverFlow(row, length)) {
-                return
-            }
-            for (let i = row; i < (row + length); i++) {
-                board[i][column] = warShip;
-            }
-        } else {
-            if (isOverFlow(column, length)) {
-                return
-            }
-            for (let i = column; i < (column + length); i++) {
-                board[row][i] = warShip;
-            }
+        return false;
+      }
+    } else {
+      for (let i = y; i < y + length; i++) {
+        let positions = [
+          [x - 1, i],
+          [x, i],
+          [x + 1, i],
+          [x - 1, i - 1],
+          [x + 1, i + 1],
+          [x, i - 1],
+          [x, i + 1],
+          [x - 1, i + 1],
+          [x + 1, i - 1],
+        ];
+        positions = positions.filter((pair) =>
+          pair.every((coordinate) => coordinate >= 0 && coordinate < 10),
+        );
+        for (const coordinates of positions) {
+          if (board[coordinates[0]][coordinates[1]] != 0) {
+            return true;
+          }
         }
-        fleet.push(warShip)
+        return false;
+      }
     }
+  };
 
-    const receiveAttack = (coordinates) => {
-        const [row, column] = [getRowIndex(coordinates), getColumnIndex(coordinates)]
-        if (board[row][column]) {
-            board[row][column].hit()
-        } else if (board[row][column] === 0) {
-            missedShots.push([row, column])
-        } else {
-            return
-        }
-        board[row][column] = null;
-    }
+  const isOverFlow = (initial, length) => {
+    return initial + length > 9;
+  };
 
-    const isAllSunk = () => {
-        for (const ship of fleet) {
-            if (!ship.isSunk()) {
-                return false
-            }
-        }
-        return true
-    }
+  const getRowIndex = (coordinate) => {
+    const rowId = {
+      a: 0,
+      b: 1,
+      c: 2,
+      d: 3,
+      e: 4,
+      f: 5,
+      g: 6,
+      h: 7,
+      i: 8,
+      j: 9,
+    };
+    return rowId[coordinate[0].toLowerCase()];
+  };
 
-    // private methods
+  const getColumnIndex = (coordinate) => Number(coordinate[1]) - 1;
 
-    const isInvalidPosition = (x, y, length, isVertical) => {
-        if (isVertical) {
-            for (let i = x; i < (x + length); i++) {
-                let positions = [[i - 1, y], [i, y], [i + 1, y], [i - 1, y- 1], [i + 1, y + 1], [i, y - 1], [i, y + 1], [i - 1, y + 1], [i + 1, y - 1]]
-                positions = positions.filter(pair => pair.every(coordinate => coordinate >= 0 && coordinate < 10))
-                for (const coordinates of positions) {
-                    if (board[coordinates[0]][coordinates[1]] != 0) {
-                        return true
-                    }
-                }
-                return false;
-            }
-        } else {
-            for (let i = y; i < (y + length); i++) {
-                let positions = [[x - 1, i], [x, i], [x + 1, i], [x - 1, i- 1], [x + 1, i + 1], [x, i - 1], [x, i + 1], [x - 1, i + 1], [x + 1, i - 1]]
-                positions = positions.filter(pair => pair.every(coordinate => coordinate >= 0 && coordinate < 10))
-                for (const coordinates of positions) {
-                    if (board[coordinates[0]][coordinates[1]] != 0) {
-                        return true
-                    }
-                }
-                return false;
-            }
-        }
-    }
-
-    const isOverFlow = (initial, length) => {
-        return (initial + length) > 9
-    }
-
-    const getRowIndex = (coordinate) => {
-        const rowId = {a:0,b:1,c:2,d:3,e:4,f:5,g:6,h:7,i:8,j:9};
-        return rowId[coordinate[0].toLowerCase()];
-    }
-
-    const getColumnIndex = (coordinate) => Number(coordinate[1]) - 1;
-
-    return { getBoard, getMissedShots, isAllSunk, placeShip, receiveAttack };
+  return { getBoard, getMissedShots, isAllSunk, placeShip, receiveAttack };
 }
