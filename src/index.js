@@ -1,3 +1,4 @@
 import "./style.css"
+import gameController from "./gameController.js"
 
-console.log("Hello dev");
+gameController().createBoards()

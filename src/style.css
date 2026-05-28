@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box
+}
+
+.game-boards, .player1-div, .player2-div, .player1-div > div, .player2-div > div {
+    display: grid;
+}
+
+.game-boards {
+    grid-template-columns: repeat(auto-fill, 600px);
+    gap: 20px
+}
+
+.player1-div, .player2-div {
+    grid-template-rows: repeat(10, 50px);
+}
+
+.player1-div > div, .player2-div > div {
+    grid-template-columns: repeat(10, 50px)
+}
+
+.player1-div > div > button, .player2-div > div > button {
+    border: 1px solid black;
+    outline: none;
+}
+
+button:hover {
+    cursor: pointer;
+}
