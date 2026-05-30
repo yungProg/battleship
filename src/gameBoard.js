@@ -34,14 +34,14 @@ export default function gameBoard() {
       if (isOverFlow(row, length)) {
         return;
       }
-      for (let i = row; i < row + length; i++) {
+      for (let i = row; i < (row + length); i++) {
         board[i][column] = warShip;
       }
     } else {
       if (isOverFlow(column, length)) {
         return;
       }
-      for (let i = column; i < column + length; i++) {
+      for (let i = column; i < (column + length); i++) {
         board[row][i] = warShip;
       }
     }
@@ -76,7 +76,7 @@ export default function gameBoard() {
 
   const isInvalidPosition = (x, y, length, isVertical) => {
     if (isVertical) {
-      for (let i = x; i < x + length; i++) {
+      for (let i = x; i < (x + length); i++) {
         let positions = [
           [i - 1, y],
           [i, y],
@@ -89,7 +89,7 @@ export default function gameBoard() {
           [i + 1, y - 1],
         ];
         positions = positions.filter((pair) =>
-          pair.every((coordinate) => coordinate >= 0 && coordinate < 10),
+          pair.every((coordinate) => ((coordinate >= 0) && (coordinate < 10))),
         );
         for (const coordinates of positions) {
           if (board[coordinates[0]][coordinates[1]] != 0) {
@@ -99,7 +99,7 @@ export default function gameBoard() {
         return false;
       }
     } else {
-      for (let i = y; i < y + length; i++) {
+      for (let i = y; (i < y + length); i++) {
         let positions = [
           [x - 1, i],
           [x, i],
@@ -112,7 +112,7 @@ export default function gameBoard() {
           [x + 1, i - 1],
         ];
         positions = positions.filter((pair) =>
-          pair.every((coordinate) => coordinate >= 0 && coordinate < 10),
+          pair.every((coordinate) => ((coordinate >= 0) && (coordinate < 10))),
         );
         for (const coordinates of positions) {
           if (board[coordinates[0]][coordinates[1]] != 0) {
@@ -125,7 +125,7 @@ export default function gameBoard() {
   };
 
   const isOverFlow = (initial, length) => {
-    return initial + length > 9;
+    return (initial + length > 10);
   };
 
   const getRowIndex = (coordinate) => {
@@ -144,7 +144,10 @@ export default function gameBoard() {
     return rowId[coordinate[0].toLowerCase()];
   };
 
-  const getColumnIndex = (coordinate) => Number(coordinate[1]) - 1;
+  const getColumnIndex = (coordinate) => {
+    const strNum = coordinate.slice(1,)
+    return Number(strNum) - 1
+  };
 
   return { getBoard, getMissedShots, isAllSunk, placeShip, receiveAttack };
 }
