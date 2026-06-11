@@ -2,6 +2,19 @@
   box-sizing: border-box;
 }
 
+.pass-board {
+  color: #fff;
+  background-color: #427834;
+  width: 100%;
+  max-width: 500px;
+  padding: 16px;
+  font-size: 1.2rem;
+}
+
+.hide {
+  display: none;
+}
+
 .game-boards,
 .player1-div,
 .player2-div,
@@ -40,7 +53,8 @@ button:hover {
 }
 
 button:disabled,
-.current button {
+.current button,
+.over button {
   cursor: not-allowed;
 }
 

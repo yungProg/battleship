@@ -6,6 +6,8 @@ export default function gameController() {
   const board1Div = document.querySelector(".player1-div");
   const board2Div = document.querySelector(".player2-div");
   const winnerDisplay = document.querySelector(".winner");
+  const currentPlayerDisplay = document.querySelector(".current-player");
+  const passBoardBtn = document.querySelector(".pass-board");
   const player1 = player("Player 1");
   const player2 = player("Player 2");
   const player1Board = player1.customBoard;
@@ -44,14 +46,16 @@ export default function gameController() {
     strategize(player2Board, player2Fleet);
     createBoard(player1Board.getBoard(), board1Div);
     createBoard(player2Board.getBoard(), board2Div);
+    currentPlayerDisplay.textContent = `${currentPlayer.name} turn`
   };
 
   const endGame = () => {
     winnerDisplay.textContent = `${currentPlayer.name} won!`;
-    board2Div.style.visibility = "visible";
-    board1Div.style.visibility = "visible";
+    // board2Div.style.visibility = "visible";
+    // board1Div.style.visibility = "visible";
     [board1Div, board2Div].forEach((board) => {
       board.removeEventListener("click", handleAttack);
+      board.classList.add("over");
     });
   };
 
@@ -64,7 +68,8 @@ export default function gameController() {
       return;
     }
     if (!hit) {
-      switchTurn();
+      passBoardBtn.classList.toggle('hide');
+      passBoardBtn.textContent = `Pass board to ${currentPlayer.name}`;
     }
     e.preventDefault();
   };
@@ -84,6 +89,7 @@ export default function gameController() {
     currentBoard = currentBoard == player1Board ? player2Board : player1Board;
     opponentBoard = opponentBoard == player1Board ? player2Board : player1Board;
     currentPlayer = currentPlayer == player1 ? player2 : player1;
+    currentPlayerDisplay.textContent = `${currentPlayer.name} turn`;
     [board1Div, board2Div].forEach((div) => {
       div.classList.toggle("current");
       div.classList.toggle("opponent");
@@ -100,6 +106,13 @@ export default function gameController() {
       board2Div.addEventListener("click", handleAttack);
     }
   };
+
+  const passBoard = () => {
+    passBoardBtn.classList.toggle('hide');
+    switchTurn();
+  }
+
+  passBoardBtn.addEventListener("click", passBoard);
 
   return { initiate, switchTurn };
 }
