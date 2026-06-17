@@ -8,7 +8,21 @@
   <body>
     <header class="header">
       <h1>Battleship</h1>
-      <button id="start" type="button">Play</button>
+      <form action="#">
+        <fieldset>
+          <legend>PLAY OPTIONS</legend>
+          <p>Select your opponent </p>
+          <div>
+            <input type="radio" name="play-option" id="ai" class="ai" value="ai" checked>
+            <label for="ai" class="ai-label">AI</label>
+          </div>
+          <div>
+            <input type="radio" name="play-option" id="human" class="human" value="human">
+            <label for="human" class="human-label">Human</label>
+          </div>
+          <input type="submit" value="Play">
+        </fieldset>
+      </form>
     </header>
     <main class="main">
       <button type="button" class="pass-board hide"></button>
