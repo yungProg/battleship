@@ -36,8 +36,8 @@ export default function screenUpdater() {
     // cellBtn.style.backgroundColor = "#5843f5";
   };
 
-  const colorize = (board, cellId) => {
-    const cellBtn = document.querySelector(`button[data-${cellId}]`)
+  const colorize = (board, cellId, section) => {
+    const cellBtn = document.querySelector(`${section} [data-id=${cellId}]`);
     cellBtn.style.backgroundColor = "#6a6a6a";
     if (board.getCell(cellBtn.dataset.id) == 0) {
       cellBtn.textContent = ".";

@@ -4,8 +4,10 @@ import player from "./player.js";
 export default function gameController() {
   // instantiate
   const playOptionForm = document.querySelector("form");
-  let opponent = null
+  let opponent = null;
   let eTarget = true;
+  let isHit = false;
+  let opponentSection = ".player2-div";
   const board1Div = document.querySelector(".player1-div");
   const board2Div = document.querySelector(".player2-div");
   const winnerDisplay = document.querySelector(".winner");
@@ -41,6 +43,7 @@ export default function gameController() {
   ];
 
   let currentPlayer = player1;
+  let opponentPlayer = player2;
   let currentBoard = player1Board;
   let opponentBoard = player2Board;
 
@@ -49,7 +52,10 @@ export default function gameController() {
     strategize(player2Board, player2Fleet);
     createBoard(player1Board.getBoard(), board1Div);
     createBoard(player2Board.getBoard(), board2Div);
-    currentPlayerDisplay.textContent = `${currentPlayer.name} turn`
+    currentPlayerDisplay.textContent = `${currentPlayer.name} turn`;
+    if (opponent != "human") {
+      player2.generatePossibleMoves();
+    }
   };
 
   const endGame = () => {
@@ -61,21 +67,24 @@ export default function gameController() {
   };
 
   const handleAttack = (target) => {
-    screenUpdater().colorize(opponentBoard, target);
-    let hit
-    if (eTarget) {
-      hit = opponentBoard.receiveAttack(target.dataset.id);
-    } else {
-      hit = opponentBoard.receiveAttack(target);
-    }
+    screenUpdater().colorize(opponentBoard, target, opponentSection);
+    const hit = opponentBoard.receiveAttack(target);
+    // if (eTarget) {
+    //   hit = opponentBoard.receiveAttack(target.dataset.id);
+    // } else {
+    //   hit = opponentBoard.receiveAttack(target);
+    // }
     // e.target.setAttribute("disabled", true);
     if (opponentBoard.isAllSunk()) {
       endGame();
       return;
     }
     if (!hit) {
-      passBoardBtn.classList.toggle('hide');
-      passBoardBtn.textContent = `Pass board to ${currentPlayer.name}`;
+      passBoardBtn.classList.toggle("hide");
+      passBoardBtn.textContent = `Pass board to ${opponentPlayer.name}`;
+      isHit = false;
+    } else {
+      isHit = true;
     }
     // e.preventDefault();
   };
@@ -91,26 +100,21 @@ export default function gameController() {
   };
 
   const attackListener = (e) => {
-    eTarget = true
-    handleAttack(e.target)
+    eTarget = true;
+    handleAttack(e.target.dataset.id);
     e.target.setAttribute("disabled", true);
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   const switchTurn = () => {
     currentBoard = currentBoard == player1Board ? player2Board : player1Board;
     opponentBoard = opponentBoard == player1Board ? player2Board : player1Board;
     currentPlayer = currentPlayer == player1 ? player2 : player1;
-    currentPlayerDisplay.textContent = `${currentPlayer.name} turn`;
-    if (opponent == 'human') {
-      [board1Div, board2Div].forEach((div) => {
-      div.classList.toggle("current");
-      div.classList.toggle("opponent");
-    });
-    } else {
-      eTarget = null;
-      handleAttack(player2.aiAttack())
-    }
+    opponentPlayer = opponentPlayer == player1 ? player2 : player1;
+    opponentSection =
+      opponentSection == ".player1-div" ? ".player2-div" : ".player1-div";
+    console.log(opponentPlayer);
+
     if (opponentBoard == player1Board) {
       board2Div.removeEventListener("click", attackListener);
       board1Div.addEventListener("click", attackListener);
@@ -118,12 +122,29 @@ export default function gameController() {
       board1Div.removeEventListener("click", attackListener);
       board2Div.addEventListener("click", attackListener);
     }
+    if (opponent == "human") {
+      [board1Div, board2Div].forEach((div) => {
+        div.classList.toggle("current");
+        div.classList.toggle("opponent");
+      });
+    } else if (opponentPlayer == player1) {
+      eTarget = null;
+      aiMove();
+    }
+    currentPlayerDisplay.textContent = `${currentPlayer.name} turn`;
+  };
+
+  const aiMove = () => {
+    handleAttack(player2.aiAttack());
+    while (isHit) {
+      handleAttack(player2.aiAttack());
+    }
   };
 
   const passBoard = () => {
-    passBoardBtn.classList.toggle('hide');
+    passBoardBtn.classList.toggle("hide");
     switchTurn();
-  }
+  };
 
   passBoardBtn.addEventListener("click", passBoard);
 
@@ -132,9 +153,9 @@ export default function gameController() {
     initiate();
     const formReturns = new FormData(playOptionForm);
     opponent = formReturns.get("play-option");
-    playOptionForm.style.display = 'none'
-    console.log(opponent)
-  })
+    playOptionForm.style.display = "none";
+    console.log(opponent);
+  });
 
   return { initiate, switchTurn };
 }
