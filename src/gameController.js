@@ -11,6 +11,7 @@ export default function gameController() {
   const board1Div = document.querySelector(".player1-div");
   const board2Div = document.querySelector(".player2-div");
   const opponentDiv = document.querySelector(".opponent");
+  const currentDiv = document.querySelector(".current");
   const winnerDisplay = document.querySelector(".winner");
   const currentPlayerDisplay = document.querySelector(".current-player");
   const passBoardBtn = document.querySelector(".pass-board");
@@ -85,6 +86,7 @@ export default function gameController() {
       passBoardBtn.textContent = `Pass board to ${opponentPlayer.name}`;
       opponentDiv.removeEventListener("click", attackListener);
       opponentDiv.style.cursor = "not-allowed";
+      currentDiv.removeEventListener("click", attackListener);
       isHit = false;
     } else {
       isHit = true;
@@ -116,7 +118,6 @@ export default function gameController() {
     opponentPlayer = opponentPlayer == player1 ? player2 : player1;
     opponentSection =
       opponentSection == ".player1-div" ? ".player2-div" : ".player1-div";
-    console.log(opponentPlayer);
 
     if (opponentBoard == player1Board) {
       board2Div.removeEventListener("click", attackListener);
@@ -157,7 +158,6 @@ export default function gameController() {
     const formReturns = new FormData(playOptionForm);
     opponent = formReturns.get("play-option");
     playOptionForm.style.display = "none";
-    console.log(opponent);
   });
 
   return { initiate, switchTurn };
