@@ -10,6 +10,7 @@ export default function gameController() {
   let opponentSection = ".player2-div";
   const board1Div = document.querySelector(".player1-div");
   const board2Div = document.querySelector(".player2-div");
+  const opponentDiv = document.querySelector(".opponent");
   const winnerDisplay = document.querySelector(".winner");
   const currentPlayerDisplay = document.querySelector(".current-player");
   const passBoardBtn = document.querySelector(".pass-board");
@@ -82,6 +83,8 @@ export default function gameController() {
     if (!hit) {
       passBoardBtn.classList.toggle("hide");
       passBoardBtn.textContent = `Pass board to ${opponentPlayer.name}`;
+      opponentDiv.removeEventListener("click", attackListener);
+      opponentDiv.style.cursor = "not-allowed";
       isHit = false;
     } else {
       isHit = true;
