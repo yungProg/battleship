@@ -20,16 +20,20 @@
             <input type="radio" name="play-option" id="human" class="human" value="human">
             <label for="human" class="human-label">Human</label>
           </div>
-          <input type="submit" value="Play">
+          <input type="submit" value="Confirm opponent">
         </fieldset>
       </form>
+      <div class="ports-wrapper">
+        <div class="port1"></div>
+        <div class="port2"></div>
+      </div>
     </header>
     <main class="main">
       <button type="button" class="pass-board hide"></button>
       <p class="current-player"></p>
       <p class="winner"></p>
       <div class="game-boards">
-        <section class="player1-div current"></section>
+        <section class="player1-div opponent"></section>
         <section class="player2-div opponent"></section>
       </div>
     </main>

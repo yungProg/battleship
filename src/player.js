@@ -2,11 +2,27 @@ import gameBoard from "./gameBoard.js";
 export default function player(name) {
   const customBoard = gameBoard();
   const possibleMoves = [];
+  const fleet = {
+    1: [4, "one", false],
+    2: [3, "two", false],
+    3: [2, "three", false],
+    4: [1, "four", false]
+  }
 
-  const setUpBoard = (fleet) => {
-    fleet.forEach((ship) => {
-      customBoard.placeShip(...ship);
-    });
+  const setUpFleet = (portName) => {
+    const port = document.querySelector(portName);
+    for (const ship in fleet) {
+      const dock = document.createElement("div")
+      dock.classList.add(fleet[ship][1])
+      for (let i = 0; i < fleet[ship][0]; i++) {
+        const newShip = document.createElement("button");
+        newShip.dataset.length = ship;
+        newShip.dataset.isVertical = fleet[ship][2];
+        newShip.setAttribute("draggable", true);
+        dock.appendChild(newShip)
+      }
+      port.appendChild(dock)
+    }
   };
 
   const aiAttack = () => {
@@ -26,5 +42,5 @@ export default function player(name) {
     });
   };
 
-  return { name, customBoard, setUpBoard, aiAttack, generatePossibleMoves };
+  return { name, customBoard, setUpFleet, aiAttack, generatePossibleMoves };
 }

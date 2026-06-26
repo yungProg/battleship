@@ -16,6 +16,7 @@
 }
 
 .game-boards,
+.ports-wrapper,
 .player1-div,
 .player2-div,
 .player1-div > div,
@@ -23,7 +24,34 @@
   display: grid;
 }
 
-.game-boards {
+.ports-wrapper > div > div {
+  height: 50px;
+  position: relative;
+}
+
+.one > button {
+  width: 50px;
+}
+
+.two > button {
+  width: 100px;
+}
+
+.three > button {
+  width: 150px;
+}
+
+.four > button {
+  width: 200px;
+}
+
+.ports-wrapper button {
+  height: 50px;
+  background-color: #f63434;
+  position: absolute;
+}
+
+.game-boards, .ports-wrapper {
   grid-template-columns: repeat(auto-fill, 600px);
   gap: 20px;
 }

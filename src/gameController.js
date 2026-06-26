@@ -3,6 +3,7 @@ import player from "./player.js";
 
 export default function gameController() {
   // instantiate
+  let numberOfHumans = 1
   const playOptionForm = document.querySelector("form");
   let opponent = null;
   let eTarget = true;
@@ -19,30 +20,30 @@ export default function gameController() {
   const player2 = player("Player 2");
   const player1Board = player1.customBoard;
   const player2Board = player2.customBoard;
-  const player1Fleet = [
-    ["b2", 1, true],
-    ["b6", 3, false],
-    ["d4", 4, true],
-    ["f2", 2, true],
-    ["f8", 1, true],
-    ["h6", 1, true],
-    ["h10", 3, true],
-    ["i4", 1, true],
-    ["j1", 2, false],
-    ["j6", 2, false],
-  ];
-  const player2Fleet = [
-    ["a8", 1, true],
-    ["a10", 3, true],
-    ["c3", 1, false],
-    ["d5", 4, false],
-    ["f1", 3, true],
-    ["f5", 2, false],
-    ["h3", 2, false],
-    ["h10", 1, true],
-    ["j5", 2, false],
-    ["j9", 1, false],
-  ];
+  // const player1Fleet = [
+  //   ["b2", 1, true],
+  //   ["b6", 3, false],
+  //   ["d4", 4, true],
+  //   ["f2", 2, true],
+  //   ["f8", 1, true],
+  //   ["h6", 1, true],
+  //   ["h10", 3, true],
+  //   ["i4", 1, true],
+  //   ["j1", 2, false],
+  //   ["j6", 2, false],
+  // ];
+  // const player2Fleet = [
+  //   ["a8", 1, true],
+  //   ["a10", 3, true],
+  //   ["c3", 1, false],
+  //   ["d5", 4, false],
+  //   ["f1", 3, true],
+  //   ["f5", 2, false],
+  //   ["h3", 2, false],
+  //   ["h10", 1, true],
+  //   ["j5", 2, false],
+  //   ["j9", 1, false],
+  // ];
 
   let currentPlayer = player1;
   let opponentPlayer = player2;
@@ -50,13 +51,17 @@ export default function gameController() {
   let opponentBoard = player2Board;
 
   const initiate = () => {
-    strategize(player1Board, player1Fleet);
-    strategize(player2Board, player2Fleet);
+    // strategize(player1Board, player1Fleet);
+    // strategize(player2Board, player2Fleet);
     createBoard(player1Board.getBoard(), board1Div);
     createBoard(player2Board.getBoard(), board2Div);
     currentPlayerDisplay.textContent = `${currentPlayer.name} turn`;
+    player1.setUpFleet(".port1")
     if (opponent != "human") {
       player2.generatePossibleMoves();
+      document.querySelector(".port2").style.display = 'none';
+    }else {
+      player2.setUpFleet(".port2")
     }
   };
 
@@ -157,6 +162,7 @@ export default function gameController() {
     initiate();
     const formReturns = new FormData(playOptionForm);
     opponent = formReturns.get("play-option");
+    numberOfHumans = opponent == 'ai' ? 1 : 2
     playOptionForm.style.display = "none";
   });
 
