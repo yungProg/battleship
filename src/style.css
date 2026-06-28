@@ -94,6 +94,6 @@ button:disabled,
 button:hover {
   transform: scale(1.2);
 } */
-.current .ship {
+.ship {
   background-color: #f63434;
 }

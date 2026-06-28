@@ -9,10 +9,12 @@ export default function gameController() {
   let eTarget = true;
   let isHit = false;
   let opponentSection = ".player2-div";
+  const readyBtn = document.querySelector(".ready-btn");
+  const fightBtn = document.querySelector(".fight-btn");
   const board1Div = document.querySelector(".player1-div");
   const board2Div = document.querySelector(".player2-div");
   const opponentDiv = document.querySelector(".opponent");
-  const currentDiv = document.querySelector(".current");
+  let currentDiv;
   const winnerDisplay = document.querySelector(".winner");
   const currentPlayerDisplay = document.querySelector(".current-player");
   const passBoardBtn = document.querySelector(".pass-board");
@@ -20,30 +22,6 @@ export default function gameController() {
   const player2 = player("Player 2");
   const player1Board = player1.customBoard;
   const player2Board = player2.customBoard;
-  // const player1Fleet = [
-  //   ["b2", 1, true],
-  //   ["b6", 3, false],
-  //   ["d4", 4, true],
-  //   ["f2", 2, true],
-  //   ["f8", 1, true],
-  //   ["h6", 1, true],
-  //   ["h10", 3, true],
-  //   ["i4", 1, true],
-  //   ["j1", 2, false],
-  //   ["j6", 2, false],
-  // ];
-  // const player2Fleet = [
-  //   ["a8", 1, true],
-  //   ["a10", 3, true],
-  //   ["c3", 1, false],
-  //   ["d5", 4, false],
-  //   ["f1", 3, true],
-  //   ["f5", 2, false],
-  //   ["h3", 2, false],
-  //   ["h10", 1, true],
-  //   ["j5", 2, false],
-  //   ["j9", 1, false],
-  // ];
 
   let currentPlayer = player1;
   let opponentPlayer = player2;
@@ -51,19 +29,37 @@ export default function gameController() {
   let opponentBoard = player2Board;
 
   const initiate = () => {
-    // strategize(player1Board, player1Fleet);
-    // strategize(player2Board, player2Fleet);
-    createBoard(player1Board.getBoard(), board1Div);
-    createBoard(player2Board.getBoard(), board2Div);
+    screenUpdater().renderBoard(player1Board.getBoard(), board1Div);
+    screenUpdater().renderBoard(player2Board.getBoard(), board2Div);
     currentPlayerDisplay.textContent = `${currentPlayer.name} turn`;
     player1.assembleFleet(".port1", ".player1-div");
     if (opponent != "human") {
       player2.generatePossibleMoves();
-      document.querySelector(".port2").style.display = "none";
     } else {
       player2.assembleFleet(".port2", ".player2-div");
     }
   };
+
+  readyBtn.addEventListener("click", (e) => {
+    switchTurn();
+    board1Div.removeEventListener("click", attackListener);
+    document.querySelector(".player1-div").classList.add("opponent");
+    readyBtn.classList.add("hide");
+    if (currentPlayer == player1) {
+      fightBtn.classList.remove("hide");
+    } else {
+      document.querySelector(".port2").classList.remove("hide");
+    }
+    e.preventDefault();
+  });
+
+  fightBtn.addEventListener("click", (e) => {
+    board1Div.classList.remove("opponent");
+    board1Div.classList.add("current");
+    currentDiv = document.querySelector(".current");
+    board2Div.addEventListener("click", attackListener);
+    fightBtn.classList.add("hide");
+  });
 
   const endGame = () => {
     winnerDisplay.textContent = `${currentPlayer.name} won!`;
@@ -76,12 +72,7 @@ export default function gameController() {
   const handleAttack = (target) => {
     screenUpdater().colorize(opponentBoard, target, opponentSection);
     const hit = opponentBoard.receiveAttack(target);
-    // if (eTarget) {
-    //   hit = opponentBoard.receiveAttack(target.dataset.id);
-    // } else {
-    //   hit = opponentBoard.receiveAttack(target);
-    // }
-    // e.target.setAttribute("disabled", true);
+    console.log(opponentBoard.getBoard());
     if (opponentBoard.isAllSunk()) {
       endGame();
       return;

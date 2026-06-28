@@ -49,7 +49,15 @@ export default function player(name) {
       ) {
         dragged.parentNode.removeChild(dragged);
         screenUpdater().renderBoard(customBoard.getBoard(), battleField);
-        console.log(e.target);
+      }
+      if (
+        port.children[0].children.length == 0 &&
+        port.children[1].children.length == 0 &&
+        port.children[2].children.length == 0 &&
+        port.children[3].children.length == 0
+      ) {
+        document.querySelector(".ready-btn").classList.remove("hide");
+        port.classList.add("hide");
       }
     });
   };

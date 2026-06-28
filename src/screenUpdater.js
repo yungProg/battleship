@@ -1,7 +1,5 @@
 export default function screenUpdater() {
   const renderBoard = (board, targetDiv) => {
-    console.log("rendering...");
-
     targetDiv.textContent = "";
     board.forEach((row, i) => {
       const rowDiv = document.createElement("div");
@@ -17,7 +15,6 @@ export default function screenUpdater() {
       });
       targetDiv.appendChild(rowDiv);
     });
-    console.log("rendered");
   };
 
   // private
