@@ -51,7 +51,8 @@
   position: absolute;
 }
 
-.game-boards, .ports-wrapper {
+.game-boards,
+.ports-wrapper {
   grid-template-columns: repeat(auto-fill, 600px);
   gap: 20px;
 }
@@ -86,10 +87,13 @@ button:disabled,
   cursor: not-allowed;
 }
 
-.current .ship {
-  background-color: #f63434;
-}
-
 .opponent button {
   background-color: #5843f5;
+}
+/* 
+button:hover {
+  transform: scale(1.2);
+} */
+.current .ship {
+  background-color: #f63434;
 }

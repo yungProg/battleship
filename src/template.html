@@ -11,16 +11,29 @@
       <form action="#">
         <fieldset>
           <legend>PLAY OPTIONS</legend>
-          <p>Select your opponent </p>
+          <p>Select your opponent</p>
           <div>
-            <input type="radio" name="play-option" id="ai" class="ai" value="ai" checked>
+            <input
+              type="radio"
+              name="play-option"
+              id="ai"
+              class="ai"
+              value="ai"
+              checked
+            />
             <label for="ai" class="ai-label">AI</label>
           </div>
           <div>
-            <input type="radio" name="play-option" id="human" class="human" value="human">
+            <input
+              type="radio"
+              name="play-option"
+              id="human"
+              class="human"
+              value="human"
+            />
             <label for="human" class="human-label">Human</label>
           </div>
-          <input type="submit" value="Confirm opponent">
+          <input type="submit" value="Confirm opponent" />
         </fieldset>
       </form>
       <div class="ports-wrapper">
@@ -33,7 +46,7 @@
       <p class="current-player"></p>
       <p class="winner"></p>
       <div class="game-boards">
-        <section class="player1-div opponent"></section>
+        <section class="player1-div current"></section>
         <section class="player2-div opponent"></section>
       </div>
     </main>

@@ -1,5 +1,7 @@
 export default function screenUpdater() {
   const renderBoard = (board, targetDiv) => {
+    console.log("rendering...");
+
     targetDiv.textContent = "";
     board.forEach((row, i) => {
       const rowDiv = document.createElement("div");
@@ -7,11 +9,15 @@ export default function screenUpdater() {
         const cellBtn = document.createElement("button");
         cellBtn.setAttribute("type", "button");
         cellBtn.dataset.id = `${letter[i]}${j + 1}`;
-        style(cell, cellBtn);
+        // style(cell, cellBtn);
+        if (cell) {
+          cellBtn.classList.add("ship");
+        }
         rowDiv.appendChild(cellBtn);
       });
       targetDiv.appendChild(rowDiv);
     });
+    console.log("rendered");
   };
 
   // private
