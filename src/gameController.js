@@ -41,10 +41,20 @@ export default function gameController() {
   };
 
   readyBtn.addEventListener("click", (e) => {
-    switchTurn();
     board1Div.removeEventListener("click", attackListener);
-    document.querySelector(".player1-div").classList.add("opponent");
+    console.log("hi");
+
     readyBtn.classList.add("hide");
+    if (opponent == "ai") {
+      fightBtn.classList.remove("hide");
+      player2.aiStrategize();
+      screenUpdater().renderBoard(player2Board.getBoard(), board2Div);
+      return;
+    }
+    switchTurn();
+
+    document.querySelector(".player1-div").classList.add("opponent");
+
     if (currentPlayer == player1) {
       fightBtn.classList.remove("hide");
     } else {

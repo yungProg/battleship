@@ -69,6 +69,22 @@ export default function player(name) {
     return move;
   };
 
+  const aiStrategize = () => {
+    const possibleMovesDup = [...possibleMoves];
+    for (const ship in fleet) {
+      let counter = 0;
+      while (counter < fleet[ship][0]) {
+        let randomNumber = Math.floor(Math.random() * possibleMovesDup.length);
+        let move = possibleMovesDup.splice(randomNumber, 1)[0];
+        let isVertical = [true, false][Math.floor(Math.random() * 2)];
+        if (!customBoard.placeShip(move, ship, isVertical)) {
+          counter += 1;
+        }
+      }
+      console.log(fleet[ship][0]);
+    }
+  };
+
   const generatePossibleMoves = () => {
     const rows = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
     const columns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -79,5 +95,12 @@ export default function player(name) {
     });
   };
 
-  return { name, customBoard, assembleFleet, aiAttack, generatePossibleMoves };
+  return {
+    name,
+    customBoard,
+    assembleFleet,
+    aiAttack,
+    generatePossibleMoves,
+    aiStrategize,
+  };
 }
