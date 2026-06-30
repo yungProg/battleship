@@ -35,8 +35,6 @@ export default function gameController() {
     player1.assembleFleet(".port1", ".player1-div");
     if (opponent != "human") {
       player2.generatePossibleMoves();
-    } else {
-      player2.assembleFleet(".port2", ".player2-div");
     }
   };
 
@@ -58,6 +56,7 @@ export default function gameController() {
     if (currentPlayer == player1) {
       fightBtn.classList.remove("hide");
     } else {
+      player2.assembleFleet(".port2", ".player2-div");
       document.querySelector(".port2").classList.remove("hide");
     }
     e.preventDefault();

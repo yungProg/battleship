@@ -13,33 +13,9 @@ export default function player(name) {
 
   const assembleFleet = (portName, targetName) => {
     const port = document.querySelector(portName);
-
     const battleField = document.querySelector(targetName);
 
-    for (const ship in fleet) {
-      const dock = document.createElement("div");
-      dock.classList.add(fleet[ship][1]);
-      for (let i = 0; i < fleet[ship][0]; i++) {
-        const newShip = document.createElement("button");
-        newShip.dataset.length = ship;
-        newShip.dataset.isVertical = fleet[ship][2];
-        newShip.setAttribute("draggable", true);
-        newShip.addEventListener("dragstart", (e) => {
-          dragged = newShip;
-        });
-        dock.appendChild(newShip);
-      }
-      port.appendChild(dock);
-    }
-    battleField.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      e.target.style.transform = "scale(1.2)";
-    });
-    battleField.addEventListener("dragleave", (e) => {
-      e.preventDefault();
-      e.target.style.transform = "scale(1)";
-    });
-    battleField.addEventListener("drop", (e) => {
+    const receiveShip = (e) => {
       if (
         customBoard.placeShip(
           e.target.dataset.id,
@@ -58,8 +34,37 @@ export default function player(name) {
       ) {
         document.querySelector(".ready-btn").classList.remove("hide");
         port.classList.add("hide");
+        battleField.removeEventListener("drop", receiveShip);
+        battleField.removeEventListener("dragover", reactToShipHover);
       }
+    };
+
+    const reactToShipHover = (e) => {
+      e.preventDefault();
+      e.target.style.transform = "scale(1.2)";
+    };
+
+    for (const ship in fleet) {
+      const dock = document.createElement("div");
+      dock.classList.add(fleet[ship][1]);
+      for (let i = 0; i < fleet[ship][0]; i++) {
+        const newShip = document.createElement("button");
+        newShip.dataset.length = ship;
+        newShip.dataset.isVertical = fleet[ship][2];
+        newShip.setAttribute("draggable", true);
+        newShip.addEventListener("dragstart", (e) => {
+          dragged = newShip;
+        });
+        dock.appendChild(newShip);
+      }
+      port.appendChild(dock);
+    }
+    battleField.addEventListener("dragover", reactToShipHover);
+    battleField.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      e.target.style.transform = "scale(1)";
     });
+    battleField.addEventListener("drop", receiveShip);
   };
 
   const aiAttack = () => {
