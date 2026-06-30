@@ -26,7 +26,7 @@ export default function gameBoard() {
 
   const placeShip = (coordinate, length, isVertical) => {
     const [row, column] = [getRowIndex(coordinate), getColumnIndex(coordinate)];
-    isVertical = isVertical == "false" || false ? false : true;
+    isVertical = isVertical == "false" || isVertical == false ? false : true;
     length = Number(length);
     const warShip = ship(length);
     if (isInvalidPosition(row, column, length, isVertical)) {

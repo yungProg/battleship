@@ -77,7 +77,7 @@ export default function player(name) {
         let randomNumber = Math.floor(Math.random() * possibleMovesDup.length);
         let move = possibleMovesDup.splice(randomNumber, 1)[0];
         let isVertical = [true, false][Math.floor(Math.random() * 2)];
-        if (!customBoard.placeShip(move, ship, isVertical)) {
+        if (customBoard.placeShip(move, ship, isVertical)) {
           counter += 1;
         }
       }
