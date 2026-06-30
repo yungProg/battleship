@@ -87,9 +87,9 @@ button:disabled,
   cursor: not-allowed;
 }
 
-/* .opponent button {
+.opponent button {
   background-color: #5843f5;
-} */
+}
 /* 
 button:hover {
   transform: scale(1.2);
