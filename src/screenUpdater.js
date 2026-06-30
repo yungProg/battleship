@@ -1,24 +1,4 @@
 export default function screenUpdater() {
-  const renderBoard = (board, targetDiv) => {
-    targetDiv.textContent = "";
-    board.forEach((row, i) => {
-      const rowDiv = document.createElement("div");
-      row.forEach((cell, j) => {
-        const cellBtn = document.createElement("button");
-        cellBtn.setAttribute("type", "button");
-        cellBtn.dataset.id = `${letter[i]}${j + 1}`;
-        // style(cell, cellBtn);
-        if (cell) {
-          cellBtn.classList.add("ship");
-        }
-        rowDiv.appendChild(cellBtn);
-      });
-      targetDiv.appendChild(rowDiv);
-    });
-  };
-
-  // private
-
   const letter = {
     0: "a",
     1: "b",
@@ -32,11 +12,21 @@ export default function screenUpdater() {
     9: "j",
   };
 
-  const style = (cell, cellBtn) => {
-    if (cell) {
-      cellBtn.classList.add("ship");
-    }
-    // cellBtn.style.backgroundColor = "#5843f5";
+  const renderBoard = (board, targetDiv) => {
+    targetDiv.textContent = "";
+    board.forEach((row, i) => {
+      const rowDiv = document.createElement("div");
+      row.forEach((cell, j) => {
+        const cellBtn = document.createElement("button");
+        cellBtn.setAttribute("type", "button");
+        cellBtn.dataset.id = `${letter[i]}${j + 1}`;
+        if (cell) {
+          cellBtn.classList.add("ship");
+        }
+        rowDiv.appendChild(cellBtn);
+      });
+      targetDiv.appendChild(rowDiv);
+    });
   };
 
   const colorize = (board, cellId, section) => {

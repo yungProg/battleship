@@ -22,8 +22,6 @@ export default function gameBoard() {
 
   const getMissedShots = () => missedShots;
 
-  const getFleet = () => fleet;
-
   const placeShip = (coordinate, length, isVertical) => {
     const [row, column] = [getRowIndex(coordinate), getColumnIndex(coordinate)];
     isVertical = isVertical == "false" || isVertical == false ? false : true;
@@ -75,6 +73,10 @@ export default function gameBoard() {
       }
     }
     return true;
+  };
+
+  const getCell = (coordinate) => {
+    return board[getRowIndex(coordinate)][getColumnIndex(coordinate)];
   };
 
   // private methods
@@ -152,10 +154,6 @@ export default function gameBoard() {
   const getColumnIndex = (coordinate) => {
     const strNum = coordinate.slice(1);
     return Number(strNum) - 1;
-  };
-
-  const getCell = (coordinate) => {
-    return board[getRowIndex(coordinate)][getColumnIndex(coordinate)];
   };
 
   return {

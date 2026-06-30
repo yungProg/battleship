@@ -70,7 +70,6 @@ export default function player(name) {
   const aiAttack = () => {
     const randomNumber = Math.floor(Math.random() * possibleMoves.length);
     const move = possibleMoves.splice(randomNumber, 1)[0];
-    console.log(possibleMoves.length);
     return move;
   };
 
@@ -86,7 +85,6 @@ export default function player(name) {
           counter += 1;
         }
       }
-      console.log(fleet[ship][0]);
     }
   };
 

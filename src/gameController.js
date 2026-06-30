@@ -3,10 +3,8 @@ import player from "./player.js";
 
 export default function gameController() {
   // instantiate
-  let numberOfHumans = 1;
   const playOptionForm = document.querySelector("form");
   let opponent = null;
-  let eTarget = true;
   let isHit = false;
   let opponentSection = ".player2-div";
   const readyBtn = document.querySelector(".ready-btn");
@@ -40,7 +38,6 @@ export default function gameController() {
 
   readyBtn.addEventListener("click", (e) => {
     board1Div.removeEventListener("click", attackListener);
-    console.log("hi");
 
     readyBtn.classList.add("hide");
     if (opponent == "ai") {
@@ -81,7 +78,6 @@ export default function gameController() {
   const handleAttack = (target) => {
     screenUpdater().colorize(opponentBoard, target, opponentSection);
     const hit = opponentBoard.receiveAttack(target);
-    console.log(opponentBoard.getBoard());
     if (opponentBoard.isAllSunk()) {
       endGame();
       return;
@@ -96,17 +92,6 @@ export default function gameController() {
     } else {
       isHit = true;
     }
-    // e.preventDefault();
-  };
-
-  //   private
-  const strategize = (board, fleet) => {
-    fleet.forEach((warship) => board.placeShip(...warship));
-  };
-
-  const createBoard = (board, target) => {
-    screenUpdater().renderBoard(board, target);
-    board2Div.addEventListener("click", attackListener);
   };
 
   const attackListener = (e) => {
@@ -161,10 +146,7 @@ export default function gameController() {
     e.preventDefault();
     const formReturns = new FormData(playOptionForm);
     opponent = formReturns.get("play-option");
-    numberOfHumans = opponent == "ai" ? 1 : 2;
     playOptionForm.style.display = "none";
     initiate();
   });
-
-  return { initiate, switchTurn };
 }
